@@ -2,26 +2,34 @@ package org.example.LeetCodeDSA;
 
 public class MinimumElementInSortedRotated {
     public static void main(String[] args) {
-        int arr[]={4,5,6,7,1,2};
-        int ans=pivot(arr,arr.length);
-        System.out.println(arr[ans+1]);
+        int arr[]={3,4,5,1,2};
+        int ans=findMin(arr);
+        System.out.println(ans);
 
     }
-    static int  pivot(int arr[],int n)
+    static int  findMin(int nums[])
     {
-        int start=0,end=n-1;
+        int start=0,end=nums.length-1,mid;
+        int min=Integer.MAX_VALUE;
+        if(nums[start]<nums[end])
+        {
+            return nums[0];
+        }
         while(start<=end)
         {
-            int mid=start+(end-start)/2;
-            if(mid<end&&arr[mid]>arr[mid+1])
-                return mid;
-            if(mid>start&&arr[mid]<arr[mid-1])
-                return mid-1;
-            if(arr[start]>=arr[mid])
-                end=mid-1;
-            else
+            mid=start+(end-start)/2;
+            if(nums[start]<=nums[mid])
+            {
+                min=Math.min(nums[start],min);
                 start=mid+1;
+            }
+            else
+            {
+                min=Math.min(nums[mid],min);
+                end=mid-1;
+            }
+
         }
-        return -1;
+        return min;
     }
 }
