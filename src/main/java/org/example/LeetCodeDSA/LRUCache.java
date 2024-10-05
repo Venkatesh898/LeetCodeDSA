@@ -3,15 +3,14 @@ package org.example.LeetCodeDSA;
 import java.util.HashMap;
 
 public class LRUCache {
-    HashMap<Integer,Node> hm=new HashMap<>();
-    Node head=new Node(0,0);
-    Node tail=new Node(0,0);
+    HashMap<Integer,Node>hm=new HashMap<>();
+    Node head,tail;
+
     int capacity;
 
     public LRUCache(int capacity) {
         this.capacity=capacity;
-        head.next=tail;
-        tail.prev=head;
+
 
     }
 
@@ -37,25 +36,43 @@ public class LRUCache {
         }
         if(hm.size()==capacity)
         {
-            remove(tail.prev);
+            remove(tail);
         }
         insert(new Node(key,value));
 
     }
     public void insert(Node node)
     {
+        if(hm.size()==0)
+        {
+            head=node;
+            tail=head;
+            hm.put(node.key,node);
+            return;
+        }
         hm.put(node.key,node);
-        Node headNext=head.next;
-        head.next=node;
-        node.prev=head;
-        headNext.prev=node;
-        node.next=headNext;
+        head.prev=node;
+        node.next=head;
+        head=node;
     }
-    public void remove(Node node)
-    {
+    public void remove(Node node) {
         hm.remove(node.key);
-        node.prev.next=node.next;
-        node.next.prev=node.prev;
+
+        if (node == tail) {
+            tail = tail.prev;
+            if (tail != null) {
+                tail.next = null;
+            }
+        } else if (node == head) {
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            }
+        } else {
+
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
     }
     class Node
     {
